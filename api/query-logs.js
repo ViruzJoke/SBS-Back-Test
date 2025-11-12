@@ -73,7 +73,7 @@ export default async function handler(req, res) {
                 respond_invoice,
                 respond_warnings,
                 TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at
-            FROM shipment_logs
+            FROM shipment_test_logs
         `;
 
         const whereClauses = [];

@@ -97,24 +97,23 @@ export default async function handler(req, res) {
         
         try {
              shipmentData = JSON.parse(responseBodyText);
-        } catch(e) {
-            console.error('DHL Shipment API Non-JSON Response:', responseBodyText);
-            try {
-                const errorMessage = 'Failed to parse JSON response from DHL: ' + responseBodyText;
-                await sql`
-                    INSERT INTO shipment_logs (
-                        created_at, log_type, respond_warnings,
-                        shipper_name, shipper_company, shipper_phone, shipper_email, shipper_country,
-                        receiver_name, receiver_company, receiver_phone, receiver_email, receiver_country,
-                        request_reference, shipper_account_number, billing_account_number, duty_account_number, booking_ref
-                    ) VALUES (
-                        NOW() AT TIME ZONE 'Asia/Bangkok', 'Error', ${errorMessage},
-                        ${shipperName}, ${shipperCompany}, ${shipperPhone}, ${shipperEmail}, ${shipperCountry},
-                        ${receiverName}, ${receiverCompany}, ${receiverPhone}, ${receiverEmail}, ${receiverCountry},
-                        ${requestReference}, ${shipperAccountNumber}, ${billingAccountNumber}, ${dutyAccountNumber}, null
-                    );
-                `;
-            } catch (dbError) {
+                    } catch(e) {
+                        console.error('DHL Shipment API Non-JSON Response:', responseBodyText);
+                        try {
+                            const errorMessage = 'Failed to parse JSON response from DHL: ' + responseBodyText;
+                            await sql`
+                                INSERT INTO shipment_test_logs (
+                                    created_at, log_type, respond_warnings,
+                                    shipper_name, shipper_company, shipper_phone, shipper_email, shipper_country,
+                                    receiver_name, receiver_company, receiver_phone, receiver_email, receiver_country,
+                                    request_reference, shipper_account_number, billing_account_number, duty_account_number, booking_ref
+                                ) VALUES (
+                                    NOW() AT TIME ZONE 'Asia/Bangkok', 'Error', ${errorMessage},
+                                    ${shipperName}, ${shipperCompany}, ${shipperPhone}, ${shipperEmail}, ${shipperCountry},
+                                    ${receiverName}, ${receiverCompany}, ${receiverPhone}, ${receiverEmail}, ${receiverCountry},
+                                    ${requestReference}, ${shipperAccountNumber}, ${billingAccountNumber}, ${dutyAccountNumber}, null
+                                );
+                            `;            } catch (dbError) {
                 console.error("Database logging failed for Non-JSON response:", dbError);
             }
             return res.status(shipmentResponse.status || 500).json({ 
@@ -139,7 +138,7 @@ export default async function handler(req, res) {
 
             try {
                 await sql`
-                    INSERT INTO shipment_logs (
+                    INSERT INTO shipment_test_logs (
                         created_at, log_type, respond_warnings,
                         shipper_name, shipper_company, shipper_phone, shipper_email, shipper_country,
                         receiver_name, receiver_company, receiver_phone, receiver_email, receiver_country,
@@ -169,7 +168,7 @@ export default async function handler(req, res) {
             const invoiceContent = findDocContent('invoice');
 
             await sql`
-                INSERT INTO shipment_logs (
+                INSERT INTO shipment_test_logs (
                     created_at,
                     log_type, 
                     respond_trackingnumber, 
@@ -232,7 +231,7 @@ export default async function handler(req, res) {
     } catch (error) {
         try {
             await sql`
-                INSERT INTO shipment_logs (
+                INSERT INTO shipment_test_logs (
                     created_at, log_type, respond_warnings,
                     shipper_name, shipper_company, shipper_phone, shipper_email, shipper_country,
                     receiver_name, receiver_company, receiver_phone, receiver_email, receiver_country,

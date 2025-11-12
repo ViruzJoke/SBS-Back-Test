@@ -1,5 +1,5 @@
 {
-  "name": "sbs-back",
+  "name": "sbs-back-test",
   "version": "1.0.0",
   "description": "Backend API for DHL Backup Solution",
   "main": "index.js",
